@@ -87,7 +87,7 @@ int isin(int arr[], int n, int num)
 int csort(int p[], int counter, int mode)  //obj arr  ; the number of   ;mode 1:v   0:?^
 {
 	int ct = -1, i, u;
-	for (i = 0; i<counter; i++)
+	for (i = 0; i < counter; i++)
 	{
 		ct = p[i];
 		for (u = i - 1; u >= 0; u--)
@@ -97,7 +97,7 @@ int csort(int p[], int counter, int mode)  //obj arr  ; the number of   ;mode 1:
 				//printf("ERROR!\nat parameter of csort");
 				return -1;
 			}
-			if (mode == 1 && p[u]>ct)
+			if (mode == 1 && p[u] > ct)
 				p[u + 1] = p[u];
 			else if (mode == -1 && p[u] < ct)
 				p[u + 1] = p[u];
@@ -136,18 +136,19 @@ int lsmath(int org[], int a, int arr[], int n)
 	int re = 0;
 	int flag = 0, flag2 = 0;
 
+	csort(org, a, 1);
 
 
 
 	//生成关系矩阵========================Create the relational matrix=======================================================================
 
 	int **tp;
-	tp = (int **)malloc(a*sizeof(int *));
+	tp = (int **)malloc(a * sizeof(int *));
 
 	for (i = 0; i < a; i++)
-		tp[i] = (int *)malloc(a*sizeof(int));
+		tp[i] = (int *)malloc(a * sizeof(int));
 
-
+	
 
 	for (i = 0; i < a; i++)
 		for (o = 0; o < a; o++)
@@ -179,15 +180,49 @@ int lsmath(int org[], int a, int arr[], int n)
 
 
 	//调试模式============================DEBUG Mode======================================================================
+	if (DEBUG_MODE)
 	{
+		printf("关系矩阵：\n");
 		for (i = 0; i < a; i++)
 		{
-			for (o = 0; o < a; o++)
+			if (i == 0)
 			{
-				printf("%d    ", tp[i][o]);
+				printf("    ");
+				for (o = 0; o < a; o++)
+					printf("   \033[4m%d\033[0m", org[o]);
+				printf("\n    ┌");
+				for (o = 0; o < a - 1; o++)
+					printf("─┬");
+				printf("─┐\n   \033[4m%d\033[m│", org[i]);
+
 
 			}
-			printf("\n\n");
+			for (o = 0; o < a; o++)
+			{
+				if (tp[i][o]==1)
+					printf(" \033[41m%d\033[0m│", tp[i][o]);
+				else
+					printf(" %d│", tp[i][o]);
+
+			}
+			if (i != a - 1)
+			{
+				printf("\n    ├");
+				for (o = 0; o < a - 1; o++)
+					printf("─┼");
+				printf("─┤");
+				if (org[i + 1] > 9)
+					printf("\n  \033[4m%d\033[m│", org[i + 1]);
+				else
+					printf("\n   \033[4m%d\033[m│", org[i + 1]);
+			}
+			else
+			{
+				printf("\n    └");
+				for (o = 0; o < a - 1; o++)
+					printf("─┴");
+				printf("─┘\n");
+			}
 		}
 	}
 
@@ -297,18 +332,19 @@ int lsmath(int org[], int a, int arr[], int n)
 //==========================================================================================================================================
 int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 {
-	int i, u, flag = 0, f = 0;
+	int i,j, u, flag = 0, f = 0;
 	if (iscf(a, ai) + iscf(b, bi) > 0)
 		return -1;
-		
+
 	switch (mode)
 	{
 	case 1:
 		for (i = 0; i < ai; i++)
 			obj[i] = a[i];
-		for (; i - ai < bi; i++)
-			obj[i] = b[i - ai];
+		for (j=0; j < bi; j++)
+			obj[i+j] = b[j];
 		flag = denum(obj, ai + bi);
+		
 		break;
 	case 2:
 		for (i = 0; i < ai; i++)
@@ -357,42 +393,34 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 //==========================================================================================================================================
 int denum(int arr[], int n)
 {
-	int *t;
-	t = (int *)malloc(n*sizeof(int));
-	int i, flag = 0, tt, c = 0, num;
-	for (i = 0; i < n; i++)
+	int i,j,m=0,flag=1;
+	//for (int o = 0; o < n; o++)	printf("%d\n", arr[o]);
+	//int *tmp=(int *)malloc(n*sizeof(int));
+	int tmp[10];
+	for (i = 0; i < n; i++)//arr[i]
 	{
-		if (t[i] == 0)
+		for (j = 0,flag = 1; j < m; j++)
 		{
-			t[0] = 0;
-			flag = 1;
-			break;
-		}
-
-	}
-	for (i = 0; i < n; i++)
-	{
-		if (arr[i])
-		{
-			t[i + flag] = arr[i];
-			for (tt = i + 1; tt < n; tt++)
+			if (tmp[j] == arr[i])
 			{
-				if (t[i + flag] == arr[tt])
-					arr[tt] = 0;
+				flag = 0;
 			}
-			num = i;
+
 		}
-
-
+		if (flag)
+		{
+			tmp[m++] = arr[i];
+			//printf("\ntmp[%d++]=arr[%d]=%d", m, i,arr[i]);
+		}
+		
 	}
 
-	for (tt = 0; tt < i + flag; tt++)
+	for (i = 0; i < m; i++)
 	{
-		arr[i] = t[i];
+		arr[i] = tmp[i];
 	}
-	free(t);
-	return num + 1;
-
+	//free(tmp);
+	return m;
 }
 
 
@@ -445,17 +473,17 @@ int gxfh(int a[], int ai, int b[], int bi, int obj[])
 	int counter = 0;
 	int *tmp;
 
-	tmp = (int *)malloc(2 * ai*sizeof(int));
+	tmp = (int *)malloc(2 * ai * sizeof(int));
 
 	if (tmp == NULL)
 		return -1;
 
-	for (i = 1; i<2 * ai; i += 2)
-		for (o = 0; o<2 * bi; o += 2)
+	for (i = 1; i < 2 * ai; i += 2)
+		for (o = 0; o < 2 * bi; o += 2)
 			if (a[i] == b[o])
 				if (a[i - 1] == b[o + 1])
 				{
-					for (m = 0; m<p; m++)
+					for (m = 0; m < p; m++)
 					{
 						if (a[i - 1] = tmp[m])
 						{
@@ -481,3 +509,14 @@ int gxfh(int a[], int ai, int b[], int bi, int obj[])
 }
 
 
+
+int analysisEqualClass(int dataInput[], int amountInput, int dataOutput[])
+{
+	dataOutput = (int *)malloc(amountInput * sizeof(int));
+	for (int i = 0; i<amountInput; i++)
+		dataOutput[i] = dataInput[i];
+	amountInput = denum(dataOutput, amountInput);
+	csort(dataOutput, amountInput, -1);
+	free(dataOutput);
+	return amountInput;
+}

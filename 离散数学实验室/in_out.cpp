@@ -1,21 +1,22 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<conio.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 using namespace std;
 
 //==========================================================================================================================================
-//º¯ÊıÃû£ºinputdata
-//×÷Õß£ºÈ·¶¨¸ñÊ½»¯
-//ÈÕÆÚ£º2016.04.25
-//¹¦ÄÜ£º¸ñÊ½»¯ÊäÈë¼¯ºÏ»ò¹ØÏµ
-//ÊäÈë²ÎÊı£º arr£º		ÊäÈëº¯ÊıÄ¿±ê£¨Ò»Î¬£©Êı×é
-//			count£º	´ıÊäÈëµÄÔªËØµÄ¸öÊı
-//			mode£º	¼¯ºÏ|¹ØÏµÊäÈëÄ£Ê½£¬1£ºÊäÈë¼¯ºÏ£¬2£ºÊäÈë¹ØÏµ
-//·µ»ØÖµ£º	ÀàĞÍ		ÕûĞÎ£¨int£©
-//			·µ»ØÊäÈë¹ØÏµµÄ¶ÔÊı£¨½öµ±modeÎª2Ê±·µ»ØÖµÓĞÒâÒå£©
-//ĞŞ¸Ä¼ÇÂ¼£º
+//å‡½æ•°åï¼šinputdata
+//ä½œè€…ï¼šç¡®å®šæ ¼å¼åŒ–
+//æ—¥æœŸï¼š2016.04.25
+//åŠŸèƒ½ï¼šæ ¼å¼åŒ–è¾“å…¥é›†åˆæˆ–å…³ç³»
+//è¾“å…¥å‚æ•°ï¼š arrï¼š		è¾“å…¥å‡½æ•°ç›®æ ‡ï¼ˆä¸€ç»´ï¼‰æ•°ç»„
+//			countï¼š	å¾…è¾“å…¥çš„å…ƒç´ çš„ä¸ªæ•°
+//			modeï¼š	é›†åˆ|å…³ç³»è¾“å…¥æ¨¡å¼ï¼Œ1ï¼šè¾“å…¥é›†åˆï¼Œ2ï¼šè¾“å…¥å…³ç³»
+//è¿”å›å€¼ï¼š	ç±»å‹		æ•´å½¢ï¼ˆintï¼‰
+//			è¿”å›è¾“å…¥å…³ç³»çš„å¯¹æ•°ï¼ˆä»…å½“modeä¸º2æ—¶è¿”å›å€¼æœ‰æ„ä¹‰ï¼‰
+//ä¿®æ”¹è®°å½•ï¼š
 //
 //
 //
@@ -131,24 +132,202 @@ int inputdata(int arr[], int count, int mode)		//1:jihe		2:guanxi
 
 int outputdata(int arr[], int count, int mode)
 {
-	int i;
+	int i,flag=0;
 
-	if (mode==1)
+	if (mode == 1)
 		cout << "{";
 	else
 	{
 
 	}
-		
-	
+
+
 	for (i = 0; i < count*mode; i += mode)
 	{
+		flag = 1;
 		if (mode == 1)
 			cout << arr[i] << ",";
 		else
-			cout << "<" << arr[i] << "," << arr[i + 1] << "> " ;
+			cout << "<" << arr[i] << "," << arr[i + 1] << "> ";
 	}
 	if (mode == 1)
-		cout << "}";
-		return count*mode;
+		if (flag)
+			cout << "\b}";
+		else
+			cout << "\bç©ºé›†";
+
+	return count*mode;
 }
+
+
+
+
+
+int msgbox(char title[], char text[], int W, int H, int mode)
+{
+	system("cls");
+	int i, m, u, r = 0, ch, s = 1;
+	int mainlen = strlen(text);
+	int max = W - 4;
+	int strrr = 0;
+	int w = strlen(title);
+	//w-=w/3;
+	//printf("%d %d\n",w,t);
+	if ((w % 2) + (W % 2) == 1)
+		W--;
+	printf("\n\n\t\033[47;30m");
+	printf("â•”");
+	for (i = 0; i < W / 2; i++)
+		printf("â•");
+	printf("â•—");
+	for (i = 1; i < (W + w) / 2 + 4; i++)
+		printf("\b");
+	printf(" \033[31;47m%s\033[;47m ", title);
+	w = strlen(text);
+
+
+	for (i = 0; i < H; i++)
+	{
+		printf("\033[0m\n\t\033[47;30mâ•‘");
+		for (m = 0; m < W; m++)
+			//printf("\n%d\n",strlen(title));
+			printf(" ");
+		printf("â•‘");
+
+		for (u = 0; u < W - 1; u++)
+			printf("\b");
+
+
+		for (r = 0; r < W - 6;)
+		{
+			if (strrr > w)
+				break;
+
+			if (text[strrr] <= 128)
+			{
+				printf("%c", text[strrr++]);
+				r++;
+			}
+			else
+			{
+				printf("%c%c%c", text[strrr++], text[strrr++], text[strrr++]);
+				r += 2;
+			}
+		}
+
+	}
+
+	printf("\033[0m\n\t\033[47;30mâ•š");
+	for (i = 0; i < W / 2; i++)
+		printf("â•");
+	printf("â•");
+
+
+	switch (mode)
+	{
+
+	case 1:
+	{
+		for (i = 0; i < (W - 16) / 3 + 8; i++)
+			printf("\b");
+		printf(" [ å¦ ] ");
+
+		for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
+			printf("\b");
+		printf("\033[37;44m [ æ˜¯ ] \033[0m");
+
+
+
+		while (ch = _getch(), ch != 13)
+		{
+			if (ch == 0)
+				ch = _getch();
+			if (ch == 75)
+			{
+				printf("\033[0m\r\t\033[47;30mâ•š");
+				for (i = 0; i < W / 2; i++)
+					printf("â•");
+				printf("â•");
+				for (i = 0; i < (W - 16) / 3 + 8; i++)
+					printf("\b");
+				printf(" [ å¦ ] ");
+				for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
+					printf("\b");
+				printf("\033[37;44m [ æ˜¯ ] \033[0m");
+				s = 1;
+			}
+
+			if (ch == 77)
+			{
+				printf("\033[0m\r\t\033[47;30mâ•š");
+				for (i = 0; i < W / 2; i++)
+					printf("â•");
+				printf("â•");
+				for (i = 0; i < (W - 16) / 3 + 8; i++)
+					printf("\b");
+				printf("\033[37;44m [ å¦ ] \033[0m");
+				for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
+					printf("\b");
+				printf("\033[47;30m [ æ˜¯ ] \033[0m");
+				s = 2;
+			}
+		}
+
+
+		break;
+	}
+
+	case 2:
+		for (i = 0; i < (W - 16) / 3 + 8; i++)
+			printf("\b");
+		printf(" [å¿½ç•¥] ");
+
+		for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
+			printf("\b");
+		printf("\033[37;44m [ç»ˆæ­¢] \033[0m");
+
+
+
+		while (ch = _getch(), ch != 13)
+		{
+			if (ch == 0)
+				ch = _getch();
+			if (ch == 75)
+			{
+				printf("\033[0m\r\t\033[47;30mâ•š");
+				for (i = 0; i < W / 2; i++)
+					printf("â•");
+				printf("â•");
+				for (i = 0; i < (W - 16) / 3 + 8; i++)
+					printf("\b");
+				printf(" [å¿½ç•¥] ");
+				for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
+					printf("\b");
+				printf("\033[37;44m [ç»ˆæ­¢] \033[0m");
+				s = 1;
+			}
+
+			if (ch == 77)
+			{
+				printf("\033[0m\r\t\033[47;30mâ•š");
+				for (i = 0; i < W / 2; i++)
+					printf("â•");
+				printf("â•");
+				for (i = 0; i < (W - 16) / 3 + 8; i++)
+					printf("\b");
+				printf("\033[37;44m [å¿½ç•¥] \033[0m");
+				for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
+					printf("\b");
+				printf("\033[47;30m [ç»ˆæ­¢] \033[0m");
+				s = 2;
+			}
+		}
+
+		printf("\n%d", s);
+		break;
+
+	}
+	printf("\033[0m\n");
+	return 0;
+}
+
