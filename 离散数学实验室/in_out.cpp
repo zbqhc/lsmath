@@ -3,8 +3,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<stdarg.h>
 
 using namespace std;
+
+extern void gotoxy(int, int);
 
 //==========================================================================================================================================
 //函数名：inputdata
@@ -21,10 +24,10 @@ using namespace std;
 //
 //
 //==========================================================================================================================================
-int inputdata(int arr[], int count, int mode)		//1:jihe		2:guanxi
+int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 {
-	int key = -1, num[10], n = 0, flag = 1, m, pow = 1, u, i, cn = 10;
-	for (i = 0; i < count; i++)		arr[i] = 0;
+	int key = -1, num[10], n = 0, flag = 1, m, pow = 1, u, i, cn = 10,cjh=0;
+	//for (i = 0; i < count; i++)		arr[i] = 0;
 	if (mode == 1)	cout << "{";
 	for (i = 0; i < 150 && flag; i++)
 	{
@@ -51,15 +54,16 @@ int inputdata(int arr[], int count, int mode)		//1:jihe		2:guanxi
 				cout << ",";
 				break;
 			}
-			else if (key = 10 && mode == 2)
+			else if (key = 10)
 			{
 				flag = 0;
 				break;
 			}
 
-			if (cn == count + 10)		break;
+			//if (cn == count + 10)		break;
 
 		}
+		cjh++;
 		if (flag == 2)		flag = 1;
 		for (m = 0, pow = 1; m < n; m++)
 		{
@@ -106,27 +110,33 @@ int inputdata(int arr[], int count, int mode)		//1:jihe		2:guanxi
 			}
 
 		}
-		if (mode == 1 && i > count - 2)
+		/*if (mode == 1 && i > count - 2)
 		{
 			break;
-		}
+		}*/
 	}
 	if (mode == 1)	cout << "}";
 	system("cls");
 
 
 	if (mode == 2)	cout << "input " << i - 1 << " zhu data:" << endl;
-	if (mode == 1)	cout << "input " << count << " ge yuanshu:" << endl << "{";
+	if (mode == 1)	cout << "input " << cjh-1 << " ge yuanshu:" << endl << "{";
 
-	for (u = 0; u < (i - 1) * mode + (4 - 2 * mode); u += mode)
+	for (u = 0; u < (i - 1) * mode + (4 - 2 * mode) && mode==2; u += mode)
 	{
 
-		if (mode == 2)	cout << "<" << arr[u] << "," << arr[u + 1] << ">\t";
-		if (mode == 1)	cout << arr[u] << ",";
+			cout << "<" << arr[u] << "," << arr[u + 1] << ">\t";
+			
+	}
+	for (u = 0; u < cjh-1 && mode == 1; u ++)
+	{
+
+		
+		cout << arr[u] << ",";
 	}
 	if (mode == 1)	cout << "\b}";
 	cout << endl;
-
+	getchar();
 	return i - 1;
 }
 
@@ -159,23 +169,28 @@ int outputdata(int arr[], int count, int mode)
 	return count*mode;
 }
 
-
-
-
-
-int msgbox(char title[], char text[], int W, int H, int mode)
+int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int counter,...)
 {
-	system("cls");
+	int *arr = (int *)malloc((counter+1) * sizeof(int));
+	
 	int i, m, u, r = 0, ch, s = 1;
 	int mainlen = strlen(text);
 	int max = W - 4;
 	int strrr = 0;
 	int w = strlen(title);
-	//w-=w/3;
-	//printf("%d %d\n",w,t);
+	int xnumber = 1;
+
+	va_list number;
+	va_start(number, counter);
+	for (i = 1; i < counter+1; i++)
+	{
+		arr[i] = va_arg(number, int);
+	}
+	va_end(number);
 	if ((w % 2) + (W % 2) == 1)
 		W--;
-	printf("\n\n\t\033[47;30m");
+	gotoxy(x, y);
+	printf("\033[47;30m");
 	printf("╔");
 	for (i = 0; i < W / 2; i++)
 		printf("═");
@@ -188,7 +203,8 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 
 	for (i = 0; i < H; i++)
 	{
-		printf("\033[0m\n\t\033[47;30m║");
+		gotoxy(x, ++y);
+		printf("\033[0m\033[47;30m║");
 		for (m = 0; m < W; m++)
 			//printf("\n%d\n",strlen(title));
 			printf(" ");
@@ -205,7 +221,25 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 
 			if (text[strrr] <= 128)
 			{
-				printf("%c", text[strrr++]);
+				if (text[strrr] == '%' && text[strrr + 1] == 'd')
+				{
+					printf("%d", arr[xnumber++]);
+					strrr += 2;
+					if (arr[xnumber - 1] < 10)
+						r--;
+					else if ((xnumber >= 100 && xnumber < 1000) || (xnumber<=-10 && xnumber>-100))
+						r++;
+					else if ((xnumber >= 1000 && xnumber < 10000) || (xnumber <= -100 && xnumber>-1000))
+						r += 2;
+					else if ((xnumber >= 10000 && xnumber < 100000) || (xnumber <= -1000 && xnumber>-10000))
+						r += 3;
+					else if ((xnumber >= 100000 && xnumber < 1000000) || (xnumber <= -10000 && xnumber>-100000))
+						r += 4;
+					else if ((xnumber >= 1000000 && xnumber < 10000000) || (xnumber <= -100000 && xnumber>-1000000))
+						r += 5;
+				}
+				else
+					printf("%c", text[strrr++]);
 				r++;
 			}
 			else
@@ -216,8 +250,8 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 		}
 
 	}
-
-	printf("\033[0m\n\t\033[47;30m╚");
+	gotoxy(x,++y);
+	printf("\033[0m\033[47;30m╚");
 	for (i = 0; i < W / 2; i++)
 		printf("═");
 	printf("╝");
@@ -242,9 +276,12 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 		{
 			if (ch == 0)
 				ch = _getch();
+			else if (ch == 27)
+				return 2;
 			if (ch == 75)
 			{
-				printf("\033[0m\r\t\033[47;30m╚");
+				gotoxy(x,  y);
+				printf("\033[0m\033[47;30m╚");
 				for (i = 0; i < W / 2; i++)
 					printf("═");
 				printf("╝");
@@ -259,7 +296,8 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 
 			if (ch == 77)
 			{
-				printf("\033[0m\r\t\033[47;30m╚");
+				gotoxy(x, y);
+				printf("\033[0m\033[47;30m╚");
 				for (i = 0; i < W / 2; i++)
 					printf("═");
 				printf("╝");
@@ -271,6 +309,7 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 				printf("\033[47;30m [ 是 ] \033[0m");
 				s = 2;
 			}
+			
 		}
 
 
@@ -294,7 +333,8 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 				ch = _getch();
 			if (ch == 75)
 			{
-				printf("\033[0m\r\t\033[47;30m╚");
+				gotoxy(x, y);
+				printf("\033[0m\033[47;30m╚");
 				for (i = 0; i < W / 2; i++)
 					printf("═");
 				printf("╝");
@@ -309,7 +349,8 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 
 			if (ch == 77)
 			{
-				printf("\033[0m\r\t\033[47;30m╚");
+				gotoxy(x, y);
+				printf("\033[0m\033[47;30m╚");
 				for (i = 0; i < W / 2; i++)
 					printf("═");
 				printf("╝");
@@ -323,11 +364,16 @@ int msgbox(char title[], char text[], int W, int H, int mode)
 			}
 		}
 
-		printf("\n%d", s);
+		
 		break;
-
+	default :
+		for (i = 0; i < (W-8)/2+10; i++)
+			printf("\b");
+		printf("\033[37;44m [确定] \033[0m");
+		while (_getch() != 13);
+		s = 1;
 	}
-	printf("\033[0m\n");
-	return 0;
+	
+	return s;
 }
 

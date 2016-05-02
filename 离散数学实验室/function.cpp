@@ -6,6 +6,7 @@
 
 int denum(int[], int);
 int iscf(int[], int);
+extern void gotoxy(int x, int y);
 
 extern int DEBUG_MODE;
 
@@ -332,47 +333,81 @@ int lsmath(int org[], int a, int arr[], int n)
 //==========================================================================================================================================
 int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 {
-	int i,j, u, flag = 0, f = 0;
-	if (iscf(a, ai) + iscf(b, bi) > 0)
-		return -1;
+	int i,j, u, flag = 0,flag2=1, f = 0;
+	int objarr = 0;
+	//int *tmp = (int *)malloc(2 * (ai + bi) * sizeof(int));
+	
 
 	switch (mode)
 	{
 	case 1:
-		for (i = 0; i < ai; i++)
-			obj[i] = a[i];
-		for (j=0; j < bi; j++)
-			obj[i+j] = b[j];
-		flag = denum(obj, ai + bi);
-		
-		break;
-	case 2:
-		for (i = 0; i < ai; i++)
+		for (i = 0; i < 2 * ai; i += 2)
 		{
-			for (u = 0; u < bi; u++)
+			for (j = 0; j < objarr; j += 2)
+				if (obj[j] == a[i] && obj[j + 1] == a[i + 1])
+					flag2 = 0;
+			if (flag2)
 			{
-				if (a[i] == b[u])
+				obj[objarr] = a[i];
+				obj[objarr + 1] = a[i + 1];
+				objarr += 2;	
+			}
+			flag2 = 1;
+		}
+
+		for (i = 0; i < 2 * bi; i += 2)
+		{
+			for (j = 0; j < objarr; j += 2)
+				if (obj[j] == b[i] && obj[j + 1] == b[i + 1])
+				{
+					flag2 = 0;
+					break;
+				}
+			if (flag2)
+			{
+				obj[objarr] = b[i];
+				obj[objarr + 1] = b[i + 1];
+				objarr += 2;
+			}
+			flag2 = 1;
+		}
+		flag = objarr / 2;
+		break;
+
+	case 2:
+		for (i = 0; i < 2*ai; i+=2)
+		{
+			for (u = 0; u < 2*bi; u+=2)
+			{
+				if (a[i] == b[u] && a[i+1]==b[u+1])
 				{
 					obj[flag++] = a[i];
+					obj[flag++] = a[i + 1];
 					break;
 				}
 			}
 		}
+		flag /= 2;
 		break;
 	case 3:
-		for (i = 0; i < ai; i++, f = 0)
+		for (i = 0; i < 2*ai; i+=2, f = 0)
 		{
-			for (u = 0; u < bi; u++)
+			for (u = 0; u < 2*bi; u+=2)
 			{
-				if (a[i] == b[u])
+				if (a[i] == b[u] && a[i+1]==b[u+1])
 				{
 					f = 1;
 					break;
 				}
 			}
 			if (f == 0)
+			{
 				obj[flag++] = a[i];
+				obj[flag++] = a[i + 1];
+			}
 		}
+		flag /= 2;
+		break;
 	}
 	return flag;
 }
@@ -512,11 +547,11 @@ int gxfh(int a[], int ai, int b[], int bi, int obj[])
 
 int analysisEqualClass(int dataInput[], int amountInput, int dataOutput[])
 {
-	dataOutput = (int *)malloc(amountInput * sizeof(int));
+	//dataOutput = (int *)malloc(amountInput * sizeof(int));
 	for (int i = 0; i<amountInput; i++)
 		dataOutput[i] = dataInput[i];
 	amountInput = denum(dataOutput, amountInput);
-	csort(dataOutput, amountInput, -1);
-	free(dataOutput);
+	csort(dataOutput, amountInput, 1);
+	//free(dataOutput);
 	return amountInput;
 }

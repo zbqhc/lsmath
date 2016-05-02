@@ -2,15 +2,28 @@
 #include<conio.h>
 #include<stdlib.h>
 #include<iostream>
+#include<Windows.h>
 
 extern int DEBUG_MODE;
-
+extern int gameFlag;
+void gotoxy(int x, int y);
 
 
 
 void uiselect(int, int);
 
 using namespace std;
+void gotoxy(int x, int y)
+
+{
+	COORD pos;
+
+	pos.X = (gameFlag +1)* x;
+
+	pos.Y = y;
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
 int ui(int sele)
 {
 	int i = 0, ch;
