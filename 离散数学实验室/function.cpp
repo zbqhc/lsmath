@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_DEPRECATE
+#include"lsmath.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<conio.h>
@@ -8,7 +8,7 @@ int denum(int[], int);
 int iscf(int[], int);
 extern void gotoxy(int x, int y);
 
-extern int DEBUG_MODE;
+
 
 using namespace std;
 
@@ -22,7 +22,8 @@ using namespace std;
 //输入参数：	lsa：	集合a
 //			lsaa：	集合a元素个数
 //			lsb：	集合b
-//			lsb：	集合b元素个数
+//			lsbb：	集合b元素个数
+//			obj:	目标数组
 //			debug：	调试模式，1：允许，0：禁用
 //返回值：	运行正常：1，参数错误：0
 //修改记录：
@@ -32,19 +33,18 @@ using namespace std;
 //==========================================================================================================================================
 int dker(int lsa[], int lsaa, int lsb[], int lsbb, int obj[], int debug)
 {
-	int o, p;
+	int o, p,i=0;
 	if (lsaa <= 0 || lsbb <= 0)
 		return 0;
 	for (o = 0; o < lsaa; o++)
 		for (p = 0; p < lsbb; p++)
 		{
-			if (debug)
-				printf("<%d,%d>\t", lsa[o], lsb[p]);
+			i++;
 			obj[2 * (o*lsbb + p)] = lsa[o];
 			obj[2 * (o*lsbb + p) + 1] = lsb[p];
 		}
 
-	return 1;
+	return i;
 }
 
 
@@ -181,51 +181,6 @@ int lsmath(int org[], int a, int arr[], int n)
 
 
 	//调试模式============================DEBUG Mode======================================================================
-	if (DEBUG_MODE)
-	{
-		printf("关系矩阵：\n");
-		for (i = 0; i < a; i++)
-		{
-			if (i == 0)
-			{
-				printf("    ");
-				for (o = 0; o < a; o++)
-					printf("   \033[4m%d\033[0m", org[o]);
-				printf("\n    ┌");
-				for (o = 0; o < a - 1; o++)
-					printf("─┬");
-				printf("─┐\n   \033[4m%d\033[m│", org[i]);
-
-
-			}
-			for (o = 0; o < a; o++)
-			{
-				if (tp[i][o]==1)
-					printf(" \033[41m%d\033[0m│", tp[i][o]);
-				else
-					printf(" %d│", tp[i][o]);
-
-			}
-			if (i != a - 1)
-			{
-				printf("\n    ├");
-				for (o = 0; o < a - 1; o++)
-					printf("─┼");
-				printf("─┤");
-				if (org[i + 1] > 9)
-					printf("\n  \033[4m%d\033[m│", org[i + 1]);
-				else
-					printf("\n   \033[4m%d\033[m│", org[i + 1]);
-			}
-			else
-			{
-				printf("\n    └");
-				for (o = 0; o < a - 1; o++)
-					printf("─┴");
-				printf("─┘\n");
-			}
-		}
-	}
 
 	//判断自反============================ZIFAN Analysis======================================================================
 	{
@@ -307,6 +262,8 @@ int lsmath(int org[], int a, int arr[], int n)
 	re += count_zf * 100000 + count_dc * 1000 + count_cd * 10;
 
 
+	if (DEBUG_MODE)
+		printf("\n\n返回原始数据为：%d\n\n", re);
 	return re;
 
 
@@ -318,10 +275,10 @@ int lsmath(int org[], int a, int arr[], int n)
 //作者：确定格式化
 //日期：2016.04.27
 //功能：对给定两个集合进行基本运算
-//输入参数：	a		第一个集合
-//			ai		第一个集合元素个数
-//			b		第二个集合
-//			bi		第二个集合元素个数
+//输入参数：	a		第一个关系
+//			ai		第一个关系元素个数
+//			b		第二个关系
+//			bi		第二个关系元素个数
 //			obj		基本运算结果目标
 //			mode	运算模式：1	并集运算，2 交集运算，3 差集运算（a差b）
 //返回值：	类型		整形（int）
@@ -333,7 +290,7 @@ int lsmath(int org[], int a, int arr[], int n)
 //==========================================================================================================================================
 int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 {
-	int i,j, u, flag = 0,flag2=1, f = 0;
+	int i, j, u, flag = 0, flag2 = 1, flag3 = 0, f = 0;
 	int objarr = 0;
 	//int *tmp = (int *)malloc(2 * (ai + bi) * sizeof(int));
 	
@@ -383,11 +340,15 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 				{
 					obj[flag++] = a[i];
 					obj[flag++] = a[i + 1];
+					flag3 = 1;
 					break;
 				}
 			}
 		}
-		flag /= 2;
+		if (flag3)
+			flag /= 2;
+		else
+			flag = -20;
 		break;
 	case 3:
 		for (i = 0; i < 2*ai; i+=2, f = 0)
@@ -404,9 +365,13 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 			{
 				obj[flag++] = a[i];
 				obj[flag++] = a[i + 1];
+				flag3 = 1;
 			}
 		}
-		flag /= 2;
+		if (flag3)
+			flag /= 2;
+		else
+			flag = -20;
 		break;
 	}
 	return flag;
@@ -554,4 +519,15 @@ int analysisEqualClass(int dataInput[], int amountInput, int dataOutput[])
 	csort(dataOutput, amountInput, 1);
 	//free(dataOutput);
 	return amountInput;
+}
+
+int inversion(int org[], int obj [],int count)
+{
+	int i;
+	for (i = 0; i < 2 * count; i += 2)
+	{
+		obj[i + 1] = org[i];
+		obj[i] = org[i + 1];
+	}
+	return 1;
 }

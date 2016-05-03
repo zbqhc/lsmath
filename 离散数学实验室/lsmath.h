@@ -6,8 +6,15 @@
 
 #define CLS system("cls");
 
-#define MAXH 10
+#define MAXH 19
 
-#define VERSION "V0.3"
-#define BUILDNUMBER "20160502"
-#define DATENOW "2016.05.02"
+#define VERSION "V0.4"
+#define BUILDNUMBER "20160503"
+#define DATENOW "2016.05.03"
+
+#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_SECURE_NO_WARNINGS
+
+#define LEVEL 8
+
+#define DEBUG_MODE 0

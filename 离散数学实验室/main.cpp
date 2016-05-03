@@ -22,36 +22,166 @@ extern int showItem(int,int,int,int, int, ...);								//0x0e: 菜单模块
 
 extern void loginui(void);
 extern int dealMenu(int);
+extern int teamAbout(void);
+extern int setting(void);
+
+extern int lsbaseWindows(void);
+extern int dkerWindows(void);
+extern int gxbbWindows(void);
+extern int complexWindows(void);
+extern int equalWindows(void);
+extern int partialWindows(void);
+extern int inversionWindows(void);
 
 
-int DEBUG_MODE = 1;
+
+
+
 int gameFlag=0;
 
 
 
 const int CONX = GetSystemMetrics(SM_CXSCREEN) + 300,CONY = GetSystemMetrics(SM_CYSCREEN) + 300;
-
+int menuMark = 0;
 
 int main()
 {
 	printf("\33[?25l");
 	
+	//int *xxxMark = (int *)malloc(sizeof(int));
 	HWND hwnd = GetForegroundWindow();
 	SetWindowTextA(hwnd, "离散数学实验室 - LSMATH LAB");
 	
 
+	//showItem(0, 2, 75, 1, smax, "进入实验室", "高级设置", "关于作者", "离开实验室");
 
-	
+	int flag = 1;
+	int GUID=1000;
+
+	while (flag)
+	{
+		switch (GUID)
+		{
+		case 1000://主菜单
+			loginui();
+			GUID=dealMenu(1000);
+			break;
+
+		case 11:
+			GUID=dealMenu(11);
+			
+			break;
+
+		case 111:
+			GUID=lsbaseWindows();
+			break;
+
+		/*case 1111:
+			printf("1111\n");
+			break;
+
+		case 1112:
+			printf("1112\n");
+			break;
+
+		case 1113:
+			printf("1113\n");
+			break;*/
+
+
+
+		case 112:
+			GUID = dkerWindows();
+			break;
+
+		case 113:
+			GUID = gxbbWindows();
+			break;
+/*
+		case 1131:
+			break;
+
+		case 1132:
+			break;
+
+		case 1133:
+			break;
+
+			*/
+		case 114:
+			GUID = complexWindows();
+			break;
+
+		case 115:
+			GUID = equalWindows();
+			break;
+
+		case 116:
+			GUID = partialWindows();
+			break;
+
+		case 117:
+			loginui();
+			printf("此功能正在开发中。。。。\n");
+			_getch();
+			GUID = 11;
+			loginui();
+			break;
+
+		case 118:
+			GUID = inversionWindows();
+			break;
+
+		case 12:
+			GUID=setting();
+			break;
+
+		case 13:
+			GUID=teamAbout();
+			break;
+
+		case 14:
+			flag = 0;
+			break;
+
+
+		default:
+			break;
+		}
+	}
+
+
+
+
+
+
+	/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	loginui();
 	int temp = 0;
-
-	while (temp=dealMenu(1),(temp == 0|| temp== -21))
+	static int exitFlag = 1;
+	while (exitFlag)
 	{
-		CLS;
-		loginui();
+		while (temp = , (temp == 0 || temp == -21))
+		{
+			CLS;
+			loginui();
+		}
+
 	}
-		
-	
-	
+	*/
 	return 0;
 }

@@ -2,12 +2,13 @@
 #include<Windows.h>
 #include"lsmath.h"
 
-extern int DEBUG_MODE;
+
+extern void gotoxy(int, int);
 void loginui(void)
 {
 	
 	int i;
-	system("cls");
+	CLS;
 	printf("  离散数学实验室\t\t\t\t\t    ");
 	printf(VERSION);
 	printf("  Build ");
@@ -15,5 +16,12 @@ void loginui(void)
 		printf("\n");
 	for (i = 0; i < 40; i++)
 		printf("━");
+
+	gotoxy(0, 2);
 	printf("\n");
+	for (i = 0; i<MAXH + 5; i++)
+		printf("\n");
+	for (i = 0; i < 40; i++)
+		printf("━");
+	gotoxy(0, 2);
 }

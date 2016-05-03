@@ -9,7 +9,7 @@ extern int dealMenu(int);
 extern void loginui(void);
 extern void gotoxy(int, int);
 
-void teamAbout(void)
+int teamAbout(void)
 {
 	int i;
 	HWND hwnd = GetForegroundWindow();
@@ -22,25 +22,21 @@ void teamAbout(void)
 	printf(DATENOW);
 	printf("\n");
 	printf("\n\t本软件在最终发布前对功能进行了测试，确保功能都尽量准确执行，但由\n\t于团队水平和开发经验有限，错误和疏漏在所难免，还望各位不吝赐教。");
-	gotoxy(0, 2);
-	for (i = 0; i<MAXH + 5; i++)
-		printf("\n");
-	for (i = 0; i < 40; i++)
-		printf("━");
+	
+	
 	i = 1;
 	while (_getch() == ' ')
 	{
 		i++;
-		if (i > 8)
+		if (i > 7)
 		{
 			gameStart();
-			CLS;
-			loginui();
-			dealMenu(1);
+			break;
 		}
 	}
-	CLS;
-	loginui();
-	dealMenu(1);
+	
+
+	return 1000;
+	
 	
 }

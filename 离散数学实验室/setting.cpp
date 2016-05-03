@@ -1,8 +1,10 @@
 #include<stdio.h>
+#include<conio.h>
 extern void loginui(void);
 int setting(void)
 {
 	loginui();
-
-	return 0;
+	printf("´ıÍêÉÆ");
+	_getch();
+	return 1000;
 }

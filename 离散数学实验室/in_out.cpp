@@ -8,6 +8,7 @@
 using namespace std;
 
 extern void gotoxy(int, int);
+extern void loginui(void);
 
 //==========================================================================================================================================
 //函数名：inputdata
@@ -42,6 +43,12 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 		while (flag)
 		{
 			key = _getch();
+			////////////////beta
+			if (key == 8)
+			{
+				printf("\b \b");
+				n--;/////////////beta
+			}else
 			if (key > 47 && key < 58)
 			{
 				flag = 2;
@@ -81,6 +88,13 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 			while (flag)
 			{
 				key = _getch();
+				////////////////beta
+				if (key == 8)
+				{
+					printf("\b \b");
+					n--;/////////////beta
+				}
+				else
 				if (key > 47 && key < 58)
 				{
 					flag = 2;
@@ -116,11 +130,15 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 		}*/
 	}
 	if (mode == 1)	cout << "}";
-	system("cls");
-
-
-	if (mode == 2)	cout << "input " << i - 1 << " zhu data:" << endl;
-	if (mode == 1)	cout << "input " << cjh-1 << " ge yuanshu:" << endl << "{";
+	
+	loginui();
+	
+	/*if (mode == 2)
+	{
+		gotoxy(0, 2);
+		cout << "第  组集合数据：" << endl;
+	}
+	if (mode == 1)	cout <<  "组关系" << endl << "{";
 
 	for (u = 0; u < (i - 1) * mode + (4 - 2 * mode) && mode==2; u += mode)
 	{
@@ -135,8 +153,7 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 		cout << arr[u] << ",";
 	}
 	if (mode == 1)	cout << "\b}";
-	cout << endl;
-	getchar();
+	cout << endl;*/
 	return i - 1;
 }
 
@@ -278,6 +295,15 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 				ch = _getch();
 			else if (ch == 27)
 				return 2;
+			else if (ch==121)
+			{
+				return 1;
+
+			}
+			else if (ch==110)
+			{
+				return 2;
+			}
 			if (ch == 75)
 			{
 				gotoxy(x,  y);
@@ -366,12 +392,15 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 
 		
 		break;
-	default :
+	case 0 :
 		for (i = 0; i < (W-8)/2+10; i++)
 			printf("\b");
 		printf("\033[37;44m [确定] \033[0m");
 		while (_getch() != 13);
 		s = 1;
+		break;
+	default:
+		break;
 	}
 	
 	return s;

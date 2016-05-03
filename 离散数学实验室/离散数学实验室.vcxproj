@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lsmath.cpp" />
     <ClCompile Include="teamabout.cpp" />
     <ClCompile Include="function.cpp" />
     <ClCompile Include="game.cpp" />

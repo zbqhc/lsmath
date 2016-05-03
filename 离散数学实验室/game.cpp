@@ -6,15 +6,18 @@
 //normal star:1
 //null:0
 //==============================================================
+#include"lsmath.h"
 #include<stdio.h>
 #include<stdlib.h>
 #include<Windows.h>
 #include<time.h>
 #include<conio.h>
 
+
+
+
 #define INITX 34
 #define INITY 26
-#define CLS system("cls")
 #define BLOCK (struct block *)
 #define SBLOCK sizeof(struct block)
 
@@ -32,10 +35,11 @@ int **snakeGround = (int**)malloc(INITX * sizeof(int*));
 int hor = 1, ver = 0;
 int nailx, naily;
 extern int gameFlag;
-unsigned int score = 0,counter=0,timesCounter=INITX;
-int  level=8;
+unsigned int counter=0,timesCounter=INITX;
+unsigned int  level=LEVEL;
 int globalFlag = 1;
-
+int speed;
+int score = 0;
 
 
 extern void gotoxy(int, int);
@@ -53,6 +57,8 @@ int setSnakeFood(int);
 void snakeDeath(int);
 int produceRandNumber(int,int,int);
 void snakeGroundType(int);
+
+int saveScore(int);
 
 
 
@@ -73,6 +79,48 @@ void snakeGroundType(int type)
 	default:
 		break;
 	}
+}
+int saveScore(int localScore)
+{
+	
+	FILE *fp;
+	
+	int flag = 0;
+	char sc[10];
+	int scoreFromFile;
+	
+	fp = fopen("snake_score.dat", "a+");
+	fseek(fp, 0L, SEEK_END);
+	if (!ftell(fp))
+	{
+		fseek(fp, 0L, SEEK_SET);
+		_itoa(localScore, sc, 10);
+		fprintf(fp, sc);
+		return localScore;
+	}
+	else
+	{
+		fseek(fp, 0L, SEEK_SET);
+		fscanf(fp, "%d", &scoreFromFile);
+		if (localScore > scoreFromFile)
+		{
+			_itoa(localScore, sc, 10);
+			fclose(fp);
+			fp = fopen("snake_score.dat", "w");
+			fprintf(fp, sc);
+			fclose(fp);
+			return localScore;
+		}
+		else
+		{
+			fclose(fp);
+			return scoreFromFile;
+		}
+
+	}
+	
+	
+	
 }
 void createGround(int WL, int HL)
 {
@@ -183,8 +231,11 @@ int readSnake(block *first,int mode)
 			snakeGround[local->x][local->y] = 10;
 			printf("■");
 			//printf("%d %d %d\n",local->x ,local->y ,snakeGround[local->x][local->y]);
-			if (flag)
+			if (flag || mode == -10)
+			{
 				snakeDeath(snakeGround[local->x][local->y]);
+				speed = 1;
+			}
 			
 			break;
 		}
@@ -201,7 +252,7 @@ int readSnake(block *first,int mode)
 }
 int runSnake(block *first)
 {
-	int speed;
+	
 	gotoxy(0, INITY+2);
 		printf("得分：%d",score);
 	switch (level)
@@ -245,7 +296,7 @@ int runSnake(block *first)
 			int keyEvent;
 			while (1) {
 				keyEvent = _getch();
-				if (keyEvent == 0)
+				if (keyEvent == 0 || keyEvent==224)
 					keyEvent = _getch(); 
 				if (keyEvent == 72)
 				{
@@ -277,6 +328,11 @@ int runSnake(block *first)
 						hor = 1;
 					break;
 				}
+				if (keyEvent == 134)
+				{
+					snakeDeath(1);
+					break;
+				}
 			}
 		}
 	}
@@ -285,7 +341,7 @@ int runSnake(block *first)
 int deleteSnake(block *first)
 {
 	local = first;
-	int x, y;
+	int x;
 	while (local != NULL)
 	{
 		link = local->next;
@@ -428,7 +484,7 @@ int setSnakeFood(int mode)
 }
 void snakeDeath(int mode)
 {
-	int i,x,y;
+	int i;
 	hor = 0;
 	ver = 0;
 	for (i = 0; i < 10; i++)
@@ -441,17 +497,15 @@ void snakeDeath(int mode)
 		Sleep(100);
 	}
 	
-
-	msgbox("游戏结束", "最高分：%d分", 5,5,50, 8, 0,1,score);
-	
+	int sam = saveScore(score);
+	msgbox("游戏结束", "最高分：%d分", 5,5,50, 8, 0,1,sam);
 	globalFlag = 0;
 	
 
 }
 void gameStart(void)
 {
-
-
+	
 	gameFlag = 1;
 	globalFlag = 1;
 	HWND hwnd = GetForegroundWindow();

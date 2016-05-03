@@ -7,7 +7,6 @@
 #include"lsmath.h"
 
 
-#define CLS system("cls")
 
 //int pos;
 extern void gotoxy(int, int);
@@ -54,11 +53,11 @@ int showItem(int x,int y,int w,int select, int quantity, ...)
 			FOREGROUND_INTENSITY);
 			printf("\n");
 	}
-	gotoxy(0, 2);
+	/*gotoxy(0, 2);
 	for (i = 0; i<MAXH+5; i++)
 		printf("\n");
 	for (i = 0; i < 40; i++)
-		printf("━");
+		printf("━");*/
 return 0;
 
 }
@@ -70,6 +69,11 @@ int selectItem(int n)
 	{
 		switch (n)
 		{
+		case 21:
+			smax = 3;
+			showItem(0, 5, 75, sele, 3, "计算并集","计算交集", "计算差集");
+				break;
+
 		case 2:
 			smax = 8;
 			showItem(0, 2, 75, sele, smax, "关系的基本运算", "笛卡尔乘积运算", "判断关系闭包", "关系复合运算", "判断等价关系", "判断偏序关系", "分析等价类", "逆关系运算");
@@ -81,75 +85,7 @@ int selectItem(int n)
 		}
 		key = _getch();
 
-		switch (key)
-		{
-		case 0:
-			key = _getch();
-			break;
-		case 48+1:
-			sele = 1;
-			keyMark = 1;
-			break;
-		case 48+2:
-			if (key-48 < smax)
-				sele = 2;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+3:
-			if (key-48 < smax)
-				sele = 3;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+4:
-			if (key-48 < smax)
-				sele = 4;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+5:
-			if (key-48 < smax)
-				sele = 5;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+6:
-			if (key-48 < smax)
-				sele = 6;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+7:
-			if (key-48 < smax)
-				sele = 7;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+8:
-			if (key-48 < smax)
-				sele = 8;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 48+9:
-			if (key-48 < smax)
-				sele = 9;
-			else
-				sele = smax;
-			keyMark = 1;
-			break;
-		case 27:
-			sele = -1;
-			break;
-		}
+		
 
 		if (key == 72)
 		{
