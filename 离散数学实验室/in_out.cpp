@@ -1,5 +1,6 @@
-﻿#include<iostream>
+﻿#include<Windows.h>
 #include<conio.h>
+#include<iostream>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -43,6 +44,8 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 		while (flag)
 		{
 			key = _getch();
+			if (key == 27)
+				return -1;
 			////////////////beta
 			if (key == 8)
 			{
@@ -88,6 +91,8 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 			while (flag)
 			{
 				key = _getch();
+				if (key == 27)
+					return -1;
 				////////////////beta
 				if (key == 8)
 				{
@@ -129,9 +134,9 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 			break;
 		}*/
 	}
-	if (mode == 1)	cout << "}";
+	if (mode == 1)	cout << "\b}";
 	
-	loginui();
+	//loginui();
 	
 	/*if (mode == 2)
 	{
@@ -197,6 +202,10 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 	int w = strlen(title);
 	int xnumber = 1;
 
+	HANDLE hOut;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	va_list number;
 	va_start(number, counter);
 	for (i = 1; i < counter+1; i++)
@@ -207,21 +216,35 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 	if ((w % 2) + (W % 2) == 1)
 		W--;
 	gotoxy(x, y);
-	printf("\033[47;30m");
+	SetConsoleTextAttribute(hOut,
+		BACKGROUND_RED |
+		BACKGROUND_GREEN |
+		BACKGROUND_BLUE |
+		BACKGROUND_INTENSITY);
 	printf("╔");
 	for (i = 0; i < W / 2; i++)
 		printf("═");
 	printf("╗");
 	for (i = 1; i < (W + w) / 2 + 4; i++)
 		printf("\b");
-	printf(" \033[31;47m%s\033[;47m ", title);
+	SetConsoleTextAttribute(hOut,
+		BACKGROUND_RED |
+		BACKGROUND_GREEN |
+		BACKGROUND_BLUE |
+		BACKGROUND_INTENSITY);
+	printf(" %s ", title);
 	w = strlen(text);
 
 
 	for (i = 0; i < H; i++)
 	{
 		gotoxy(x, ++y);
-		printf("\033[0m\033[47;30m║");
+		SetConsoleTextAttribute(hOut,
+			BACKGROUND_RED |
+			BACKGROUND_GREEN |
+			BACKGROUND_BLUE |
+			BACKGROUND_INTENSITY);
+		printf("║");
 		for (m = 0; m < W; m++)
 			//printf("\n%d\n",strlen(title));
 			printf(" ");
@@ -268,7 +291,12 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 
 	}
 	gotoxy(x,++y);
-	printf("\033[0m\033[47;30m╚");
+	SetConsoleTextAttribute(hOut,
+		BACKGROUND_RED |
+		BACKGROUND_GREEN |
+		BACKGROUND_BLUE |
+		BACKGROUND_INTENSITY);
+	printf("╚");
 	for (i = 0; i < W / 2; i++)
 		printf("═");
 	printf("╝");
@@ -285,7 +313,20 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 
 		for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
 			printf("\b");
-		printf("\033[37;44m [ 是 ] \033[0m");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			BACKGROUND_BLUE |
+			FOREGROUND_INTENSITY |
+			BACKGROUND_INTENSITY);
+		printf(" [ 是 ] ");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
+
 
 
 
@@ -307,32 +348,84 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 			if (ch == 75)
 			{
 				gotoxy(x,  y);
-				printf("\033[0m\033[47;30m╚");
+				SetConsoleTextAttribute(hOut,
+					BACKGROUND_RED |
+					BACKGROUND_GREEN |
+					BACKGROUND_BLUE |
+					BACKGROUND_INTENSITY);
+				printf("╚");
 				for (i = 0; i < W / 2; i++)
 					printf("═");
+
 				printf("╝");
 				for (i = 0; i < (W - 16) / 3 + 8; i++)
 					printf("\b");
 				printf(" [ 否 ] ");
 				for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
 					printf("\b");
-				printf("\033[37;44m [ 是 ] \033[0m");
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					BACKGROUND_BLUE |
+					FOREGROUND_INTENSITY |
+					BACKGROUND_INTENSITY);
+				printf(" [ 是 ] ");
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					FOREGROUND_BLUE |
+					FOREGROUND_INTENSITY);
 				s = 1;
 			}
 
 			if (ch == 77)
 			{
 				gotoxy(x, y);
-				printf("\033[0m\033[47;30m╚");
+				SetConsoleTextAttribute(hOut,
+					BACKGROUND_RED |
+					BACKGROUND_GREEN |
+					BACKGROUND_BLUE |
+					BACKGROUND_INTENSITY);
+				printf("╚");
 				for (i = 0; i < W / 2; i++)
 					printf("═");
 				printf("╝");
 				for (i = 0; i < (W - 16) / 3 + 8; i++)
 					printf("\b");
-				printf("\033[37;44m [ 否 ] \033[0m");
+				SetConsoleTextAttribute(hOut, 
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					BACKGROUND_BLUE | 
+					FOREGROUND_INTENSITY |
+					BACKGROUND_INTENSITY);
+				
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					FOREGROUND_BLUE |
+					BACKGROUND_BLUE |
+					FOREGROUND_INTENSITY |
+					BACKGROUND_INTENSITY);
+				printf(" [ 否 ] ");
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					FOREGROUND_BLUE |
+					FOREGROUND_INTENSITY);
+
 				for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
 					printf("\b");
-				printf("\033[47;30m [ 是 ] \033[0m");
+				SetConsoleTextAttribute(hOut,
+					BACKGROUND_RED |
+					BACKGROUND_GREEN |
+					BACKGROUND_BLUE |
+					BACKGROUND_INTENSITY);
+				printf(" [ 是 ] ");
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					FOREGROUND_BLUE |
+					FOREGROUND_INTENSITY);
 				s = 2;
 			}
 			
@@ -349,7 +442,19 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 
 		for (i = 0; i < ((W - 16) / 3 + 6) * 2; i++)
 			printf("\b");
-		printf("\033[37;44m [终止] \033[0m");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			BACKGROUND_BLUE |
+			FOREGROUND_INTENSITY |
+			BACKGROUND_INTENSITY);
+		printf(" [终止] ");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
 
 
 
@@ -395,7 +500,19 @@ int msgbox(char title[], char text[],int x,int y, int W, int H, int mode,int cou
 	case 0 :
 		for (i = 0; i < (W-8)/2+10; i++)
 			printf("\b");
-		printf("\033[37;44m [确定] \033[0m");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			BACKGROUND_BLUE |
+			FOREGROUND_INTENSITY |
+			BACKGROUND_INTENSITY);
+		printf(" [确定] ");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
 		while (_getch() != 13);
 		s = 1;
 		break;

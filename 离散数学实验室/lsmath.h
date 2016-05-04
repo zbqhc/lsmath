@@ -8,9 +8,9 @@
 
 #define MAXH 19
 
-#define VERSION "V0.4"
-#define BUILDNUMBER "20160503"
-#define DATENOW "2016.05.03"
+#define VERSION "V0.5"
+#define BUILDNUMBER "20160504"
+#define DATENOW "2016.05.04"
 
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_SECURE_NO_WARNINGS
@@ -18,3 +18,6 @@
 #define LEVEL 8
 
 #define DEBUG_MODE 0
+
+#pragma comment(lib, "Shell32.lib")
+#pragma comment(lib,"user32.lib")

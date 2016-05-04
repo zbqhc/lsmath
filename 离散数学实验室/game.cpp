@@ -333,6 +333,11 @@ int runSnake(block *first)
 					snakeDeath(1);
 					break;
 				}
+				if (keyEvent == 27)
+				{
+					snakeDeath(-1);
+					break;
+				}
 			}
 		}
 	}
@@ -357,9 +362,22 @@ int deleteSnake(block *first)
 void foodCountDown(int markNumber)
 {
 	int i;
+	HANDLE hOut;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	gotoxy(0, INITY+1);
 	for (i = 0; i < markNumber; i++)
-		printf("\033[31m■\033[0m");
+	{
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_INTENSITY);
+		printf("■");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
+	}
 	for (i = 0; i < INITX - markNumber && markNumber>-1; i++)
 		printf(" ");
 
@@ -449,6 +467,9 @@ int setSnakeFood(int mode)
 {
 	static int markx, marky;
 	int x, y,flag=1;
+	HANDLE hOut;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	do
 	{
 		x = produceRandNumber(1, INITX -1,56);
@@ -465,7 +486,15 @@ int setSnakeFood(int mode)
 	}
 	else if (mode==2)
 	{
-		printf("\033[31m★\033[0m");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_INTENSITY);
+		printf("★");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
 		markx = x;
 		marky = y;
 		snakeGround[x][y] = 2;
@@ -487,18 +516,30 @@ void snakeDeath(int mode)
 	int i;
 	hor = 0;
 	ver = 0;
-	for (i = 0; i < 10; i++)
+	HANDLE hOut;
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	for (i = 0; i < 10 && mode !=-1; i++)
 	{
 		gotoxy(local->x, local->y);
-		printf("\033[0m●");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED |
+			FOREGROUND_GREEN |
+			FOREGROUND_BLUE |
+			FOREGROUND_INTENSITY);
+		printf("●");
 		Sleep(50);
 		gotoxy(local->x, local->y);
-		printf("\033[35m●");
+		SetConsoleTextAttribute(hOut,
+			FOREGROUND_RED);
+		printf("●");
 		Sleep(100);
 	}
-	
-	int sam = saveScore(score);
-	msgbox("游戏结束", "最高分：%d分", 5,5,50, 8, 0,1,sam);
+
+	if (mode != -1)
+	{
+		int sam = saveScore(score);
+		msgbox("游戏结束", "最高分：%d分", 5, 5, 50, 8, 0, 1, sam);
+	}
 	globalFlag = 0;
 	
 

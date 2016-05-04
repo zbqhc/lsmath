@@ -9,9 +9,22 @@
 
 
 //int pos;
-extern void gotoxy(int, int);
+
+extern int gameFlag;
+void gotoxy(int, int);
 
 
+void gotoxy(int x, int y)
+
+{
+	COORD pos;
+
+	pos.X = (gameFlag + 1)* x;
+
+	pos.Y = y;
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
 
 int showItem(int x,int y,int w,int select, int quantity, ...)
 {

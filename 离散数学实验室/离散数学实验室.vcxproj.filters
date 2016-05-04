@@ -24,9 +24,6 @@
     <ClCompile Include="loginui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ui.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

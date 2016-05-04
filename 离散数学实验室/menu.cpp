@@ -167,6 +167,8 @@ int dealMenu(int n)
 		break;
 
 	case 11:
+		HWND hwnd = GetForegroundWindow();
+		SetWindowTextA(hwnd, "离散数学实验室 - 主菜单");
 		smax = 8;
 		mark = 1;
 		showItem(0, 2, 75, mark, smax, "关系的基本运算", "笛卡尔乘积运算", "判断关系闭包", "关系复合运算", "判断等价关系", "判断偏序关系", "分析等价类", "逆关系运算");
@@ -200,6 +202,8 @@ int dealMenu(int n)
 	return mark;
 
 }
+
+
 	//item = selectItem(n);
 	//if (n == 1)
 		/*

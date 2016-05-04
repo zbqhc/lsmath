@@ -37,6 +37,8 @@ extern int inversionWindows(void);
 
 
 
+
+
 int gameFlag=0;
 
 
