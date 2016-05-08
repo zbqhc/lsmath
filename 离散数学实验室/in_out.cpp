@@ -10,6 +10,7 @@ using namespace std;
 
 extern void gotoxy(int, int);
 extern void loginui(void);
+int msgbox(char[], char[], int, int, int, int, int, int, ...);
 
 //==========================================================================================================================================
 //函数名：inputdata
@@ -28,7 +29,7 @@ extern void loginui(void);
 //==========================================================================================================================================
 int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 {
-	int key = -1, num[10], n = 0, flag = 1, m, pow = 1, u, i, cn = 10,cjh=0;
+	int key = -1, num[12], n = 0, flag = 1, m, pow = 1, u, i, cn = 10,cjh=0,minus=1;
 	//for (i = 0; i < count; i++)		arr[i] = 0;
 	if (mode == 1)	cout << "{";
 	for (i = 0; i < 150 && flag; i++)
@@ -43,14 +44,23 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 		n = 0;
 		while (flag)
 		{
+			if (n > 10)
+			{
+				msgbox("错误", "输入数据过大", 5, 5, 50, 8, 0, 1);
+				return -3;
+			}
 			key = _getch();
 			if (key == 27)
 				return -1;
 			////////////////beta
 			if (key == 8)
 			{
-				printf("\b \b");
-				n--;/////////////beta
+				if (n!=0)
+				{
+					printf("\b \b");
+					n--;
+				}
+				else;
 			}else
 			if (key > 47 && key < 58)
 			{
@@ -90,14 +100,23 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 				num[u] = -1;
 			while (flag)
 			{
+				if (n > 10)
+				{
+					msgbox("错误", "输入数据过大", 5, 5, 50, 8, 0, 1);
+					return -3;
+				}
 				key = _getch();
 				if (key == 27)
 					return -1;
 				////////////////beta
 				if (key == 8)
 				{
-					printf("\b \b");
-					n--;/////////////beta
+					if (n != 0)
+					{
+						printf("\b \b");
+						n--;
+					}
+					else;/////////////beta
 				}
 				else
 				if (key > 47 && key < 58)

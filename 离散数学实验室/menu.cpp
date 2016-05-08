@@ -137,12 +137,13 @@ int dealMenu(int n)
 	static int item;
 	int mark = 1, lastMark = 1, keyMark = 0;
 	int sele, smax;
+	HWND hwnd = GetForegroundWindow();
 	switch (n)
 	{
 	case 1000:
 		smax = 4;
 		mark = 1;
-		showItem(0, 2, 75, mark, smax, "进入实验室", "高级设置", "关于作者", "离开实验室");
+		showItem(0, 2, 75, mark, smax, "进入实验室", "读取数据", "制作团队", "离开实验室");
 		while (1)
 		{
 			lastMark = mark;
@@ -151,7 +152,7 @@ int dealMenu(int n)
 				break;
 			if (keyMark == 1)
 			{
-				showItem(0, 2, 75, mark, smax, "进入实验室", "高级设置", "关于作者", "离开实验室");
+				showItem(0, 2, 75, mark, smax, "进入实验室", "读取数据", "制作团队", "离开实验室");
 				return 10 + mark;
 			}
 
@@ -162,12 +163,12 @@ int dealMenu(int n)
 				loginui();
 				mark = lastMark;
 			}
-			showItem(0, 2, 75, mark, smax, "进入实验室", "高级设置", "关于作者", "离开实验室");
+			showItem(0, 2, 75, mark, smax, "进入实验室", "读取数据", "制作团队", "离开实验室");
 		}
 		break;
 
 	case 11:
-		HWND hwnd = GetForegroundWindow();
+		
 		SetWindowTextA(hwnd, "离散数学实验室 - 主菜单");
 		smax = 8;
 		mark = 1;
@@ -196,72 +197,40 @@ int dealMenu(int n)
 		}
 
 		break;
+	case 12:
+		SetWindowTextA(hwnd, "离散数学实验室 - 读取数据");
+		smax = 8;
+		mark = 1;
+		showItem(0, 2, 75, mark, smax, "关系的基本运算.TXT", "笛卡尔乘积运算.TXT", "判断关系闭包.TXT", "关系复合运算.TXT", "判断等价关系.TXT", "判断偏序关系.TXT", "分析等价类.TXT", "逆关系运算.TXT");
+
+		while (1)
+		{
+			lastMark = mark;
+			mark = mej(120,8, mark, &keyMark);
+			
+			if (mark > 100)
+				break;
+			if (keyMark == 1)
+			{
+				showItem(0, 2, 75, mark, smax, "关系的基本运算.TXT", "笛卡尔乘积运算.TXT", "判断关系闭包.TXT", "关系复合运算.TXT", "判断等价关系.TXT", "判断偏序关系.TXT", "分析等价类.TXT", "逆关系运算.TXT");
+
+				return 120 + mark;
+			}
+
+			else if (mark == -1)
+			{
+				return 1000;
+			}
+			showItem(0, 2, 75, mark, smax, "关系的基本运算.TXT", "笛卡尔乘积运算.TXT", "判断关系闭包.TXT", "关系复合运算.TXT", "判断等价关系.TXT", "判断偏序关系.TXT", "分析等价类.TXT", "逆关系运算.TXT");
+
+		}
+
+		break;
 
 
 	}
 	return mark;
 
 }
-
-
-	//item = selectItem(n);
-	//if (n == 1)
-		/*
-		switch (item)
-		{
-		case 1:
-			item = dealMenu(2);
-			break;
-		case 2:
-			setting();
-			break;
-		case 3:
-			teamAbout();
-			break;
-		case 4:
-			exit(0);
-		case -1:
-			if (msgbox("提示", "您真的要离开实验室么", 12, 5, 50, 8, LS_YESNO, 0) == 1)
-				exit(0);
-			else
-			{
-				return 0;
-			}
-		}*/
-		/*else if (n == 2)
-			switch (item)
-			{
-			case 1:
-				lsbaseWindows();
-				dealMenu(21);
-
-				break;
-			case 2:
-
-			case 3:
-
-			case 4:
-
-			case 5:
-
-			case 6:
-
-			case 7:
-
-			case -1:
-				item = -21;
-			}
-		else if (n==21)
-		{
-			switch (item)
-			{
-			case 1:
-				printf("bj");
-				break;
-			case 2:
-
-			case 3:;
-			}
-		}*/
 
 

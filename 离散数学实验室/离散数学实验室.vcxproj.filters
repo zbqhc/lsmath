@@ -30,9 +30,6 @@
     <ClCompile Include="new_ui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="setting.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -43,6 +40,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="lsmath.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="readfile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

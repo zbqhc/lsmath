@@ -29,14 +29,14 @@ struct block
 	struct block *next;
 };
 
-struct block *head, *link, *nail, *local;
+struct block *head, *link, *snake, *local;
 
 int **snakeGround = (int**)malloc(INITX * sizeof(int*));
 int hor = 1, ver = 0;
-int nailx, naily;
+int snakex, snakey;
 extern int gameFlag;
 unsigned int counter=0,timesCounter=INITX;
-unsigned int  level=LEVEL;
+static unsigned int  level=LEVEL;
 int globalFlag = 1;
 int speed;
 int score = 0;
@@ -51,13 +51,12 @@ int readSnake(block *first,int);
 int runSnake(block *);
 int deleteSnake(block *first);
 void foodCountDown(int);
-void nailMove(block **first,block **latest);
+void snakeMove(block **first,block **latest);
 int addSnake(block **latest);
 int setSnakeFood(int);
 void snakeDeath(int);
 int produceRandNumber(int,int,int);
 void snakeGroundType(int);
-
 int saveScore(int);
 
 
@@ -65,7 +64,7 @@ int saveScore(int);
 
 int produceRandNumber(int nmin, int nmax,int flag)
 {
-	static unsigned int randnum1 = time(NULL)/(flag+31), randnum2 = time(NULL)/(flag-17);
+	static unsigned int randnum1 = time(NULL)/(flag+31), randnum2 = time(NULL)/(flag+17);
 	srand((unsigned int)time(NULL)*(randnum1 +=7) / flag);
 	return rand() % (nmax - nmin + 1) + nmin;
 }
@@ -147,8 +146,8 @@ int initSnake(int wi, int hi,int length)
 	int x, y;
 	hor = 1;
 	ver = 0;
-	nailx = 0;
-	naily=0;
+	snakex = 0;
+	snakey=0;
 	score = 0;
 	counter = 0;
 	timesCounter = INITX;
@@ -193,10 +192,10 @@ int initSnake(int wi, int hi,int length)
 		link = local;
 		snakeGround[wi][hi] = 10;
 	}
-	nailx = wi;
-	naily = hi;
+	snakex = wi;
+	snakey = hi;
 
-	nail = local;
+	snake = local;
 	return 1;
 }
 int readSnake(block *first,int mode)
@@ -223,8 +222,8 @@ int readSnake(block *first,int mode)
 			gotoxy(local->x, local->y);
 			printf("●");
 
-			gotoxy(nailx, naily);
-			snakeGround[nailx][naily] = 0;
+			gotoxy(snakex, snakey);
+			snakeGround[snakex][snakey] = 0;
 			printf(" ");
 
 			gotoxy(local->next->x, local->next->y);
@@ -288,7 +287,7 @@ int runSnake(block *first)
 		gotoxy(0, INITY+2);
 		printf("得分：%d",score);
 		
-		nailMove(&head, &nail);
+		snakeMove(&head, &snake);
 		readSnake(head, 1);
 		Sleep(speed);
 		if (_kbhit())
@@ -333,11 +332,61 @@ int runSnake(block *first)
 					snakeDeath(1);
 					break;
 				}
+				if (keyEvent == 59)
+				{
+					speed=1000;
+					level = 1;
+					break;
+				}
+				if (keyEvent == 60)
+				{
+					speed=800;
+					level = 2;
+					break;
+				}
+				if (keyEvent == 61)
+				{
+					speed =600;
+					level = 3;
+					break;
+				}
+				if (keyEvent == 62)
+				{
+					speed=450;
+					level = 4;
+					break;
+				}
+				if (keyEvent == 63)
+				{
+					speed=300;
+					level = 5;
+					break;
+				}
+				if (keyEvent == 64)
+				{
+					speed=200;
+					level = 6;
+					break;
+				}
+				if (keyEvent == 65)
+				{
+					speed=100;
+					level = 7;
+					break;
+				}
+				if (keyEvent == 66)
+				{
+					speed =50;
+					level = 8;
+					break;
+				}
+
 				if (keyEvent == 27)
 				{
 					snakeDeath(-1);
 					break;
 				}
+				
 			}
 		}
 	}
@@ -382,11 +431,11 @@ void foodCountDown(int markNumber)
 		printf(" ");
 
 }
-void nailMove(block **first, block **latest)
+void snakeMove(block **first, block **latest)
 {
 	static int flag = 0;
-	nailx = (*latest)->x;
-	naily = (*latest)->y;
+	snakex = (*latest)->x;
+	snakey = (*latest)->y;
 	((*latest)->last)->next = NULL;
 	(*latest)->next = *first;
 	(*first)->last = *latest;
@@ -434,7 +483,7 @@ void nailMove(block **first, block **latest)
 		snakeGround[(*first)->x][(*first)->y] = 0;
 		
 		setSnakeFood(1);
-		addSnake(&nail);
+		addSnake(&snake);
 	}
 	else if (snakeGround[(*first)->x][(*first)->y] == 2)
 	{
@@ -444,11 +493,6 @@ void nailMove(block **first, block **latest)
 			printf("  ");
 		timesCounter = -1;
 	}
-		
-		
-	
-	
-	
 }
 int addSnake(block **latest)
 {
@@ -458,8 +502,8 @@ int addSnake(block **latest)
 	(*latest)->next = addition;
 	addition->last = *latest;
 	addition->next = NULL;
-	addition->x = nailx;
-	addition->y = naily;
+	addition->x = snakex;
+	addition->y = snakey;
 	*latest = addition;
 	return 1;
 }

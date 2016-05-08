@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<conio.h>
 #include<iostream>
+#include<Windows.h>
 
 int denum(int[], int);
 int iscf(int[], int);
@@ -33,7 +34,7 @@ using namespace std;
 //==========================================================================================================================================
 int dker(int lsa[], int lsaa, int lsb[], int lsbb, int obj[], int debug)
 {
-	int o, p,i=0;
+	int o, p, i = 0;
 	if (lsaa <= 0 || lsbb <= 0)
 		return 0;
 	for (o = 0; o < lsaa; o++)
@@ -116,13 +117,15 @@ int csort(int p[], int counter, int mode)  //obj arr  ; the number of   ;mode 1:
 //作者：确定格式化
 //日期：2016.04.26
 //功能：对给定关系集合进行分析是否满足自反、对称以及传递，并分别返回其自反、对称、传递闭包
-//输入参数： org		传入集合数组
-//			a		集合数组元素个数
-//			arr		传入关系数组
-//			n		关系数组元素个数
+//输入参数： org					传入集合数组
+//			a					集合数组元素个数
+//			arr					传入关系数组
+//			n					关系数组元素个数
+//			debug_mode_run		调试模式开关
 //返回值：	类型		整形（int）
 //			末位数字：当满足自反记 4，对称记 2，传递记 1，末位即为关系满足情况加和，均未满足为0
-//			高位数字：十万百万位为自反闭包数目，千位万位为对称闭包个数，百位十位为传递闭包格式
+//			倒第二位：1：反自反	2：反对称	3：同时满足反自反、反对称
+//			高位数字：千万位百万位为自反闭包数目，十万位万位为对称闭包个数，千位百位为传递闭包格式
 //			错误代码：-1		内存申请失败
 //					 -2		数据错误
 //修改记录：
@@ -130,12 +133,16 @@ int csort(int p[], int counter, int mode)  //obj arr  ; the number of   ;mode 1:
 //
 //
 //==========================================================================================================================================
-int lsmath(int org[], int a, int arr[], int n)
+int lsmath(int org[], int a, int arr[], int n, int debug_mode_run)
 {
 	int count_zf = 0, count_dc = 0, count_cd = 0; //闭包计数变量
 	int i, o, p, x, y, t, k = 1;
 	int re = 0;
-	int flag = 0, flag2 = 0;
+	int flag = 0, flag2 = 0, flag3 = 0;
+
+	HANDLE hOut;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	csort(org, a, 1);
 
@@ -149,7 +156,7 @@ int lsmath(int org[], int a, int arr[], int n)
 	for (i = 0; i < a; i++)
 		tp[i] = (int *)malloc(a * sizeof(int));
 
-	
+
 
 	for (i = 0; i < a; i++)
 		for (o = 0; o < a; o++)
@@ -181,7 +188,115 @@ int lsmath(int org[], int a, int arr[], int n)
 
 
 	//调试模式============================DEBUG Mode======================================================================
+	if (DEBUG_MODE || debug_mode_run)
+	{
+		printf("\n\n关系矩阵：\n");
+		for (i = 0; i < a; i++)
+		{
+			if (i == 0)
+			{
+				printf("    ");
+				for (o = 0; o < a; o++)
+				{
+					printf("   ");
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_INTENSITY);
+					printf("%d", org[o]);
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_BLUE |
+						FOREGROUND_INTENSITY);
+				}
+				printf("\n    ┌");
+				for (o = 0; o < a - 1; o++)
+					printf("─┬");
+				printf("─┐\n  ");
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					FOREGROUND_INTENSITY);
+				printf("%d", org[i]);
+				SetConsoleTextAttribute(hOut,
+					FOREGROUND_RED |
+					FOREGROUND_GREEN |
+					FOREGROUND_BLUE |
+					FOREGROUND_INTENSITY);
+				printf(" │");
 
+
+			}
+			for (o = 0; o < a; o++)
+			{
+				if (tp[i][o] == 1)
+				{
+					printf(" ");
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_BLUE |
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						BACKGROUND_RED |
+						FOREGROUND_INTENSITY);
+					printf("%d", tp[i][o]);
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_BLUE |
+						FOREGROUND_INTENSITY);
+					printf("│");
+				}
+				else
+					printf(" %d│", tp[i][o]);
+
+			}
+			if (i != a - 1)
+			{
+				printf("\n    ├");
+				for (o = 0; o < a - 1; o++)
+					printf("─┼");
+				printf("─┤");
+				if (org[i + 1] > 9)
+				{
+					printf("\n");
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_INTENSITY);
+					printf(" %d", org[i + 1]);
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_BLUE |
+						FOREGROUND_INTENSITY);
+					printf(" │");
+				}
+				else
+				{
+					printf("\n  ");
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_INTENSITY);
+					printf("%d", org[i + 1]);
+					SetConsoleTextAttribute(hOut,
+						FOREGROUND_RED |
+						FOREGROUND_GREEN |
+						FOREGROUND_BLUE |
+						FOREGROUND_INTENSITY);
+					printf(" │");
+				}
+			}
+			else
+			{
+				printf("\n    └");
+				for (o = 0; o < a - 1; o++)
+					printf("─┴");
+				printf("─┘\n");
+			}
+		}
+	}
 	//判断自反============================ZIFAN Analysis======================================================================
 	{
 		for (i = 0; i < a; i++)
@@ -192,6 +307,8 @@ int lsmath(int org[], int a, int arr[], int n)
 				count_zf++;
 			}
 		}
+		if (count_zf == a)//反自反
+			re += 10;
 		if (flag == 0)
 		{
 			re += 4;
@@ -211,9 +328,14 @@ int lsmath(int org[], int a, int arr[], int n)
 					flag = 1;
 					count_dc++;
 				}
+				else if (tp[i][p] == 1)
+					flag3 = 1;
 			}
 			o++;
 		}
+
+		if (flag == 1 && flag3 == 0)
+			re += 20;
 		if (flag == 0)
 		{
 			re += 2;
@@ -259,11 +381,11 @@ int lsmath(int org[], int a, int arr[], int n)
 	}
 
 	//输出结果==================================================================================================
-	re += count_zf * 100000 + count_dc * 1000 + count_cd * 10;
+	re += count_zf * 1000000 + count_dc * 10000 + count_cd * 100;
 
 
-	if (DEBUG_MODE)
-		printf("\n\n返回原始数据为：%d\n\n", re);
+	if (DEBUG_MODE || debug_mode_run)
+		printf("\n返回原始数据为：%d", re);
 	return re;
 
 
@@ -292,8 +414,8 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 {
 	int i, j, u, flag = 0, flag2 = 1, flag3 = 0, f = 0;
 	int objarr = 0;
-	//int *tmp = (int *)malloc(2 * (ai + bi) * sizeof(int));
-	
+
+
 
 	switch (mode)
 	{
@@ -307,7 +429,7 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 			{
 				obj[objarr] = a[i];
 				obj[objarr + 1] = a[i + 1];
-				objarr += 2;	
+				objarr += 2;
 			}
 			flag2 = 1;
 		}
@@ -332,11 +454,11 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 		break;
 
 	case 2:
-		for (i = 0; i < 2*ai; i+=2)
+		for (i = 0; i < 2 * ai; i += 2)
 		{
-			for (u = 0; u < 2*bi; u+=2)
+			for (u = 0; u < 2 * bi; u += 2)
 			{
-				if (a[i] == b[u] && a[i+1]==b[u+1])
+				if (a[i] == b[u] && a[i + 1] == b[u + 1])
 				{
 					obj[flag++] = a[i];
 					obj[flag++] = a[i + 1];
@@ -351,11 +473,11 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 			flag = -20;
 		break;
 	case 3:
-		for (i = 0; i < 2*ai; i+=2, f = 0)
+		for (i = 0; i < 2 * ai; i += 2, f = 0)
 		{
-			for (u = 0; u < 2*bi; u+=2)
+			for (u = 0; u < 2 * bi; u += 2)
 			{
-				if (a[i] == b[u] && a[i+1]==b[u+1])
+				if (a[i] == b[u] && a[i + 1] == b[u + 1])
 				{
 					f = 1;
 					break;
@@ -393,13 +515,13 @@ int base(int a[], int ai, int b[], int bi, int obj[], int mode)
 //==========================================================================================================================================
 int denum(int arr[], int n)
 {
-	int i,j,m=0,flag=1;
+	int i, j, m = 0, flag = 1;
 	//for (int o = 0; o < n; o++)	printf("%d\n", arr[o]);
 	//int *tmp=(int *)malloc(n*sizeof(int));
 	int tmp[10];
 	for (i = 0; i < n; i++)//arr[i]
 	{
-		for (j = 0,flag = 1; j < m; j++)
+		for (j = 0, flag = 1; j < m; j++)
 		{
 			if (tmp[j] == arr[i])
 			{
@@ -412,7 +534,7 @@ int denum(int arr[], int n)
 			tmp[m++] = arr[i];
 			//printf("\ntmp[%d++]=arr[%d]=%d", m, i,arr[i]);
 		}
-		
+
 	}
 
 	for (i = 0; i < m; i++)
@@ -513,7 +635,7 @@ int gxfh(int a[], int ai, int b[], int bi, int obj[])
 int analysisEqualClass(int dataInput[], int amountInput, int dataOutput[])
 {
 	//dataOutput = (int *)malloc(amountInput * sizeof(int));
-	for (int i = 0; i<amountInput; i++)
+	for (int i = 0; i < amountInput; i++)
 		dataOutput[i] = dataInput[i];
 	amountInput = denum(dataOutput, amountInput);
 	csort(dataOutput, amountInput, 1);
@@ -521,7 +643,24 @@ int analysisEqualClass(int dataInput[], int amountInput, int dataOutput[])
 	return amountInput;
 }
 
-int inversion(int org[], int obj [],int count)
+//==========================================================================================================================================
+//函数名：inversion
+//作者：确定格式化
+//日期：2016.05.04
+//功能：对给定两个关系进行关系复合运算
+//输入参数：	org		原始数据
+//			obj		目标数组
+//			count	原始数据关系数目
+//返回值：	类型		整形（int）
+//					表示运算结果所包含关系个数
+//			错误代码：-1		数据错误
+//					  1		数据大概没错
+//			
+//修改记录：
+//
+//
+//==========================================================================================================================================
+int inversion(int org[], int obj[], int count)
 {
 	int i;
 	for (i = 0; i < 2 * count; i += 2)
@@ -529,5 +668,19 @@ int inversion(int org[], int obj [],int count)
 		obj[i + 1] = org[i];
 		obj[i] = org[i + 1];
 	}
+	if (count < 0)
+		return -1;
+	return 1;
+}
+
+
+
+
+int equalclassNew(int arr[], int quantity, int n, int meo[100][100])
+{
+
+	int i, k = 1;
+	for (i = 0; i < quantity; i++)
+		meo[(arr[i]) % n][1 + (meo[(arr[i]) % n][0]++)] = arr[i];
 	return 1;
 }

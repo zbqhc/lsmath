@@ -165,7 +165,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="new_ui.cpp" />
-    <ClCompile Include="setting.cpp" />
+    <ClCompile Include="readfile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lsmath.h" />

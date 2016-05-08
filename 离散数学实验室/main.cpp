@@ -4,11 +4,10 @@
 #include<conio.h>
 #include<Windows.h>
 
-extern int lsmath(int[], int, int[], int);									//0x00: 离散数学核心，综合分析关系性质
+extern int lsmath(int[], int, int[], int,int);									//0x00: 离散数学核心，综合分析关系性质
 extern int csort(int[], int, int);											//0x01: 数据排序
 extern int isin(int[], int, int);											//0x02: 判断是否存在某数据
 extern int dker(int[], int, int[], int, int[], int);						//0x03: 笛卡尔运算
-extern int ui(int);															//0x04: 用户界面接口
 extern int denum(int [], int);												//0x05: 将给定数据去重
 extern int base(int[], int, int[], int, int[], int);						//0x06: 离散数学基本运算
 extern int iscf(int[], int);												//0x07: 判断给定数据是否重复
@@ -23,7 +22,7 @@ extern int showItem(int,int,int,int, int, ...);								//0x0e: 菜单模块
 extern void loginui(void);
 extern int dealMenu(int);
 extern int teamAbout(void);
-extern int setting(void);
+extern int readFile(int);
 
 extern int lsbaseWindows(void);
 extern int dkerWindows(void);
@@ -32,7 +31,7 @@ extern int complexWindows(void);
 extern int equalWindows(void);
 extern int partialWindows(void);
 extern int inversionWindows(void);
-
+extern int equalclassWindows(void);
 
 
 
@@ -40,22 +39,30 @@ extern int inversionWindows(void);
 
 
 int gameFlag=0;
+char *DIR;
 
 
 
 const int CONX = GetSystemMetrics(SM_CXSCREEN) + 300,CONY = GetSystemMetrics(SM_CYSCREEN) + 300;
 int menuMark = 0;
 
-int main()
+int main(int argc,char *argv[])
 {
+	DIR = argv[0];
+
 	printf("\33[?25l");
 	
 	//int *xxxMark = (int *)malloc(sizeof(int));
-	HWND hwnd = GetForegroundWindow();
-	SetWindowTextA(hwnd, "离散数学实验室 - LSMATH LAB");
 	
-
-	//showItem(0, 2, 75, 1, smax, "进入实验室", "高级设置", "关于作者", "离开实验室");
+		HWND hwnd = GetForegroundWindow();
+		COORD size = { CONSOLEW, CONSOLEH };
+		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleScreenBufferSize(hOut, size);
+		SMALL_RECT rc = { 0,0, CONSOLEW - 1, CONSOLEH - 1 };
+		SetConsoleWindowInfo(hOut, true, &rc);
+	
+	SetWindowTextA(hwnd, "离散数学实验室 - LSMATH LAB");
+	SetConsoleWindowInfo(hOut, true, &rc);
 
 	int flag = 1;
 	int GUID=1000;
@@ -64,7 +71,7 @@ int main()
 	{
 		switch (GUID)
 		{
-		case 1000://主菜单
+		case 1000:
 			loginui();
 			GUID=dealMenu(1000);
 			break;
@@ -124,8 +131,8 @@ int main()
 
 		case 117:
 			loginui();
-			printf("此功能正在开发中。。。。\n");
-			_getch();
+			
+			equalclassWindows();
 			GUID = 11;
 			loginui();
 			break;
@@ -135,7 +142,39 @@ int main()
 			break;
 
 		case 12:
-			GUID=setting();
+			GUID = dealMenu(12);
+			break;
+		case 121:
+			readFile(0);
+			GUID = 12;
+			break;
+		case 122:
+			readFile(1);
+			GUID = 12;
+			break;
+		case 123:
+			readFile(2);
+			GUID = 12;
+			break;
+		case 124:
+			readFile(3);
+			GUID = 12;
+			break;
+		case 125:
+			readFile(4);
+			GUID = 12;
+			break;
+		case 126:
+			readFile(5);
+			GUID = 12;
+			break;
+		case 127:
+			readFile(6);
+			GUID = 12;
+			break;
+		case 128:
+			readFile(7);
+			GUID = 12;
 			break;
 
 		case 13:
