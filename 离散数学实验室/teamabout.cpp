@@ -18,8 +18,8 @@ int teamAbout(void)
 	
 	loginui();
 	printf("\n\n");
-	//printf("\t\t\t\t     程序作者\n\n\t\t\t\t      张博强\n\n\t\t\t辽宁工程技术大学 软件学院 15级9班\n\n\t\t\t\t    ");
-	printf("\t\t\t\t     团队信息\n\n\t\t\t    张博强、李昕、范守峰、王妍\n\n\t\t\t辽宁工程技术大学 软件学院 15级9班\n\n\t\t\t\t    ");
+	printf("\t\t\t\t     程序作者\n\n\t\t\t\t      张博强\n\n\t\t\t辽宁工程技术大学 软件学院 15级9班\n\n\t\t\t\t    ");
+	//printf("\t\t\t\t     团队信息\n\n\t\t\t    张博强、李昕、范守峰、王妍\n\n\t\t\t辽宁工程技术大学 软件学院 15级9班\n\n\t\t\t\t    ");
 	printf("\n\t\t\t\t     指导老师\n\n\t\t\t\t      冯永安\n\n");
 
 	printf("\n\n");

@@ -29,7 +29,8 @@ int msgbox(char[], char[], int, int, int, int, int, int, ...);
 //==========================================================================================================================================
 int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 {
-	int key = -1, num[12], n = 0, flag = 1, m, pow = 1, u, i, cn = 10,cjh=0,minus=1;
+	int key = -1, n = 0, flag = 1, m, pow = 1, u, i, cn = 10, cjh = 0;// , minus = 1;
+	long long num[20];
 	//for (i = 0; i < count; i++)		arr[i] = 0;
 	if (mode == 1)	cout << "{";
 	for (i = 0; i < 150 && flag; i++)
@@ -69,6 +70,15 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 				cout << key - 48;
 
 			}
+			/*else if (flag == 45)
+			{
+				if (minus == 1)
+					minus = -1;
+				else
+					minus = 1;
+
+			}*/
+			//beta
 			else if (flag > 1)
 			{
 				cout << ",";
@@ -96,7 +106,7 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 			key = -1;
 
 			n = 0;
-			for (u = 0; u < 10; u++)
+			for (u = 0; u < 19; u++)
 				num[u] = -1;
 			while (flag)
 			{
@@ -148,36 +158,11 @@ int inputdata(int arr[], int mode)		//1:jihe		2:guanxi
 			}
 
 		}
-		/*if (mode == 1 && i > count - 2)
-		{
-			break;
-		}*/
-	}
-	if (mode == 1)	cout << "\b}";
-	
-	//loginui();
-	
-	/*if (mode == 2)
-	{
-		gotoxy(0, 2);
-		cout << "第  组集合数据：" << endl;
-	}
-	if (mode == 1)	cout <<  "组关系" << endl << "{";
-
-	for (u = 0; u < (i - 1) * mode + (4 - 2 * mode) && mode==2; u += mode)
-	{
-
-			cout << "<" << arr[u] << "," << arr[u + 1] << ">\t";
-			
-	}
-	for (u = 0; u < cjh-1 && mode == 1; u ++)
-	{
-
 		
-		cout << arr[u] << ",";
 	}
 	if (mode == 1)	cout << "\b}";
-	cout << endl;*/
+	
+	
 	return i - 1;
 }
 

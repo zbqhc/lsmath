@@ -78,14 +78,14 @@ int lsbaseWindows(void)
 	{
 		if (save)
 		{
-			printf("第一组关系为：\n");
+			printf("第一组关系为：\n\t");
 			for (i = 0; i < 2 * quantity_A; i += 2)
 			{
 
 
 				printf("<%d,%d>\t", a[i], a[i + 1]);
 				if (i % 14 == 0 && i > 8)
-					printf("\n");
+					printf("\n\t");
 			}
 			if (quantity_A == 0)
 				printf("\t[空集]");
@@ -96,7 +96,7 @@ int lsbaseWindows(void)
 
 				printf("<%d,%d>\t", b[i], b[i + 1]);
 				if (i % 14 == 0 && i > 8)
-					printf("\n");
+					printf("\n\t");
 			}
 			if (quantity_B == 0)
 				printf("\t[空集]");
